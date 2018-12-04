@@ -86,7 +86,7 @@ public class FroggerView extends SurfaceView {
 
             @Override
             public void surfaceChanged(SurfaceHolder holder, int format,
-                                       int width, int height) {
+                                       int width, int height) {     
             }
         });
 
