@@ -86,7 +86,7 @@ public class FroggerView extends SurfaceView {
 
             @Override
             public void surfaceChanged(SurfaceHolder holder, int format,
-                                       int width, int height) {     
+                                       int width, int height) {
             }
         });
 
@@ -110,8 +110,8 @@ public class FroggerView extends SurfaceView {
 
         Cars.add(createSpriteCar(R.drawable.racecar_left, 400, 705, slow, true));
         Cars.add(createSpriteCar(R.drawable.racecar_left, 800, 705, slow, true));
-        Cars.add(createSpriteCar(R.drawable.racecar_right, 800, 600, slow, false));
-        Cars.add(createSpriteCar(R.drawable.racecar_right, 400, 600, slow, false));
+        Cars.add(createSpriteCar(R.drawable.racecar_right, 800, 600, fast, false));
+        Cars.add(createSpriteCar(R.drawable.racecar_right, 400, 600, fast, false));
 
         frog = createSpriteFrog(R.drawable.frog);
 
@@ -137,6 +137,13 @@ public class FroggerView extends SurfaceView {
     protected void onDraw(Canvas canvas) {
         if (canvas != null)
         {
+            if(false)
+            {
+                drawMap(canvas);
+                drawCarLog(canvas);
+            }
+            else
+            {
                 drawMap(canvas);
                 drawCarLog(canvas);
                 drawScore(canvas);
@@ -163,7 +170,7 @@ public class FroggerView extends SurfaceView {
                     setScore(getScore() + 50);
                     frog.setStartPosition();
                 }
-
+            }
         }
     }
 
@@ -288,7 +295,7 @@ public class FroggerView extends SurfaceView {
     private void drawMap(Canvas canvas)
     {
 
-        paint.setColor(Color.GREEN);
+        paint.setColor(Color.BLACK);
         canvas.drawRect(0,canvas.getHeight(),getWidth(),0 , paint);
         paint.setColor(Color.GRAY);
         canvas.drawRect(0,600,1080,600 + hCar*2 + 20 , paint);
