@@ -17,6 +17,8 @@ public class GameOver extends Activity {
     TextView prvniScore;
     TextView druheScore;
     TextView tretiScore;
+    TextView user;
+
     SharedPreferences mySharedPref;
     SharedPreferences.Editor mySharedEditor;
     @Override
@@ -27,9 +29,11 @@ public class GameOver extends Activity {
         setContentView(R.layout.activity_game_over);
         Intent intent = getIntent();
         int s = intent.getIntExtra("score",0);
-        score = findViewById(R.id.textView4);
+        score = findViewById(R.id.textView13);
+        user = findViewById(R.id.textView4);
         score.setText(String.valueOf(s));
         mySharedPref = getSharedPreferences("myPref", Context.MODE_PRIVATE);
+        user.setText(mySharedPref.getString("name", "TopPlayer"));
         int first = mySharedPref.getInt("first", 0);
         int second = mySharedPref.getInt("second", 0);
         int third = mySharedPref.getInt("third", 0);

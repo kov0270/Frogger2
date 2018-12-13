@@ -89,19 +89,18 @@ public class FroggerView extends SurfaceView {
                                        int width, int height) {
             }
         });
+        addLogs();
+        addCars();
+        frog = createSpriteFrog(R.drawable.frog);
+    }
 
+    public void lvlUp()
+    {
+        this.score = score;
+    }
 
-        Logs.add(createSpriteLog(R.drawable.log, 900, 180, slow, false));
-        hLog = Logs.get(0).getBmp().getHeight();
-        Logs.add(createSpriteLog(R.drawable.log, 900, 180 + hLog, fast, true));
-        Logs.add(createSpriteLog(R.drawable.log, 450, 180 + hLog, fast, true));
-        Logs.add(createSpriteLog(R.drawable.log, 0, 180 + hLog, fast, true));
-        Logs.add(createSpriteLog(R.drawable.log, 450, 180 + hLog, fast, true));
-        Logs.add(createSpriteLog(R.drawable.log, 0, 180 + hLog, fast, true));
-        Logs.add(createSpriteLog(R.drawable.log, 900, 180 + 2*hLog, slow, false));
-        Logs.add(createSpriteLog(R.drawable.log, 450, 180 + 2*hLog, slow, false));
-        Logs.add(createSpriteLog(R.drawable.log, 0, 180 + 2*hLog, slow, false));
-
+    public void addCars()
+    {
         Cars.add(createSpriteCar(R.drawable.car_right, 800, 1000, slow, false));
         Cars.add(createSpriteCar(R.drawable.car_right, 400, 1000, slow, false));
         hCar = Cars.get(0).getBmp().getHeight();
@@ -112,9 +111,20 @@ public class FroggerView extends SurfaceView {
         Cars.add(createSpriteCar(R.drawable.racecar_left, 800, 705, slow, true));
         Cars.add(createSpriteCar(R.drawable.racecar_right, 800, 600, fast, false));
         Cars.add(createSpriteCar(R.drawable.racecar_right, 400, 600, fast, false));
+    }
 
-        frog = createSpriteFrog(R.drawable.frog);
-
+    public void addLogs()
+    {
+        Logs.add(createSpriteLog(R.drawable.log, 900, 180, slow, false));
+        hLog = Logs.get(0).getBmp().getHeight();
+        Logs.add(createSpriteLog(R.drawable.log, 900, 180 + hLog, fast, true));
+        Logs.add(createSpriteLog(R.drawable.log, 450, 180 + hLog, fast, true));
+        Logs.add(createSpriteLog(R.drawable.log, 0, 180 + hLog, fast, true));
+        Logs.add(createSpriteLog(R.drawable.log, 450, 180 + hLog, fast, true));
+        Logs.add(createSpriteLog(R.drawable.log, 0, 180 + hLog, fast, true));
+        Logs.add(createSpriteLog(R.drawable.log, 900, 180 + 2*hLog, slow, false));
+        Logs.add(createSpriteLog(R.drawable.log, 450, 180 + 2*hLog, slow, false));
+        Logs.add(createSpriteLog(R.drawable.log, 0, 180 + 2*hLog, slow, false));
     }
 
 
@@ -178,7 +188,7 @@ public class FroggerView extends SurfaceView {
     private void drawScore(Canvas canvas)
     {
         Paint paint = new Paint();
-        paint.setColor(Color.BLACK);
+        paint.setColor(Color.WHITE);
         paint.setTextSize(50);
         canvas.drawText("Score: " + getScore(), 0, 1350, paint);
     }
@@ -196,7 +206,7 @@ public class FroggerView extends SurfaceView {
     private void drawLevel(Canvas canvas)
     {
         Paint paint = new Paint();
-        paint.setColor(Color.BLACK);
+        paint.setColor(Color.WHITE);
         paint.setTextSize(50);
         canvas.drawText("Level: " + getLevel(), 0, 1400, paint);
     }
