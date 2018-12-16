@@ -24,7 +24,8 @@ public class MainActivity extends Activity {
     }
 
     public void click(View view) {
-        setContentView(new FroggerView(this));
+        Intent intent = new Intent(this, ChooseLevel.class);
+        startActivity(intent);
     }
 
     public void showTop(View view) {

@@ -65,7 +65,7 @@ public class GameOver extends Activity {
     }
 
     public void startNewGame(View view) {
-        setContentView(new FroggerView(this));
+        setContentView(new FroggerView(this,1));
     }
 
     public void backToMenu(View view) {

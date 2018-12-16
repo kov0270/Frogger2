@@ -21,8 +21,8 @@ public class FroggerView extends SurfaceView {
     Context context;
     private SurfaceHolder holder;
     private FrogThread frogThread;
-    private int slow = 5;
-    private int fast = 10;
+    private int slow = 3;
+    private int fast = 5;
     boolean toStart = false;
     public static float currentX;
     public static float currentY;
@@ -50,6 +50,80 @@ public class FroggerView extends SurfaceView {
     public void setLevel(int level)
     {
         this.level = level;
+        if (level == 7)
+        {
+            Logs.remove(3);
+        }
+        else if (level > 5)
+        {
+            Cars.add(createSpriteCar(R.drawable.racecar_right, 0, 600, fast, false));
+            Logs.remove(4);
+        }
+        else if (level > 4)
+        {
+            Cars.add(createSpriteCar(R.drawable.racecar_left, 0, 705, slow, true));
+            Logs.remove(5);
+        }
+        else if (level > 3)
+        {
+            Cars.add(createSpriteCar(R.drawable.car_left, 0, 1105, fast, true));
+            Logs.remove(6);
+
+        }
+        else if (level > 2)
+        {
+            Logs.remove(7);
+            Cars.add(createSpriteCar(R.drawable.car_right, 0, 1000, slow, false));
+        }
+        else if (level > 1)
+        {
+            Logs.remove(8);
+        }
+    }
+    public void setStartLevel(int level)
+    {
+        this.level = level;
+        if (level > 5)
+        {
+            Cars.add(createSpriteCar(R.drawable.car_right, 0, 1000, slow, false));
+            Cars.add(createSpriteCar(R.drawable.car_left, 0, 1105, fast, true));
+            Cars.add(createSpriteCar(R.drawable.racecar_left, 0, 705, slow, true));
+            Cars.add(createSpriteCar(R.drawable.racecar_right, 0, 600, fast, false));
+            Logs.remove(8);
+            Logs.remove(7);
+            Logs.remove(6);
+            Logs.remove(5);
+            Logs.remove(4);
+        }
+        else if (level > 4)
+        {
+            Cars.add(createSpriteCar(R.drawable.car_right, 0, 1000, slow, false));
+            Cars.add(createSpriteCar(R.drawable.car_left, 0, 1105, fast, true));
+            Cars.add(createSpriteCar(R.drawable.racecar_left, 0, 705, slow, true));
+            Logs.remove(8);
+            Logs.remove(7);
+            Logs.remove(6);
+            Logs.remove(5);
+        }
+        else if (level > 3)
+        {
+            Cars.add(createSpriteCar(R.drawable.car_right, 0, 1000, slow, false));
+            Cars.add(createSpriteCar(R.drawable.car_left, 0, 1105, fast, true));
+            Logs.remove(8);
+            Logs.remove(7);
+            Logs.remove(6);
+
+        }
+        else if (level > 2)
+        {
+            Logs.remove(8);
+            Logs.remove(7);
+            Cars.add(createSpriteCar(R.drawable.car_right, 0, 1000, slow, false));
+        }
+        else if (level > 1)
+        {
+            Logs.remove(8);
+        }
     }
 
     public int getLevel()
@@ -59,11 +133,12 @@ public class FroggerView extends SurfaceView {
 
     private Frog frog;
 
-    public FroggerView(Context context) {
+    public FroggerView(Context context, int i) {
         super(context);
         frogThread = new FrogThread(this);
         holder = getHolder();
         this.context = context;
+
         holder.addCallback(new SurfaceHolder.Callback() {
             @Override
             public void surfaceDestroyed(SurfaceHolder holder) {
@@ -91,12 +166,14 @@ public class FroggerView extends SurfaceView {
         });
         addLogs();
         addCars();
+        setStartLevel(i);
         frog = createSpriteFrog(R.drawable.frog);
     }
 
     public void lvlUp()
     {
         this.score = score;
+
     }
 
     public void addCars()
@@ -113,73 +190,36 @@ public class FroggerView extends SurfaceView {
         Cars.add(createSpriteCar(R.drawable.racecar_right, 400, 600, fast, false));
     }
 
-    public void addLogs()
-    {
-        Logs.add(createSpriteLog(R.drawable.log, 900, 180, slow, false));
-        hLog = Logs.get(0).getBmp().getHeight();
-        Logs.add(createSpriteLog(R.drawable.log, 900, 180 + hLog, fast, true));
-        Logs.add(createSpriteLog(R.drawable.log, 450, 180 + hLog, fast, true));
-        Logs.add(createSpriteLog(R.drawable.log, 0, 180 + hLog, fast, true));
-        Logs.add(createSpriteLog(R.drawable.log, 450, 180 + hLog, fast, true));
-        Logs.add(createSpriteLog(R.drawable.log, 0, 180 + hLog, fast, true));
-        Logs.add(createSpriteLog(R.drawable.log, 900, 180 + 2*hLog, slow, false));
-        Logs.add(createSpriteLog(R.drawable.log, 450, 180 + 2*hLog, slow, false));
-        Logs.add(createSpriteLog(R.drawable.log, 0, 180 + 2*hLog, slow, false));
-    }
-
-
-    private Frog createSpriteFrog(int resource) {
-        Bitmap bmp = BitmapFactory.decodeResource(getResources(), resource);
-        return new Frog(this, bmp);
-    }
-
-    private Log createSpriteLog(int resource, int x, int y, int speed, boolean left) {
-        Bitmap bmp = BitmapFactory.decodeResource(getResources(), resource);
-        return new Log(this, bmp, x, y, speed, left);
-    }
-
-    private Car createSpriteCar(int resource, int x, int y, int speed, boolean left) {
-        Bitmap bmp = BitmapFactory.decodeResource(getResources(), resource);
-        return new Car(this, bmp, x, y, speed, left);
-    }
 
     @Override
     protected void onDraw(Canvas canvas) {
         if (canvas != null)
         {
-            if(false)
+            drawMap(canvas);
+            drawCarLog(canvas);
+            drawScore(canvas);
+            drawLevel(canvas);
+            drawLifes(canvas);
+            toStart = false;
+            checkAllCollision();
+
+            if (toStart)
             {
-                drawMap(canvas);
-                drawCarLog(canvas);
+                setLifesLeft(getLifesLeft() - 1);
+                if (getLifesLeft() == 0)
+                {
+                    Intent intent = new Intent(context, GameOver.class);
+                    intent.putExtra("score",score);
+                    context.startActivity(intent);
+                }
+                frog.setStartPosition();
             }
-            else
+
+            if (frog.getY() < 24)
             {
-                drawMap(canvas);
-                drawCarLog(canvas);
-                drawScore(canvas);
-                drawLevel(canvas);
-                drawLifes(canvas);
-                toStart = false;
-                checkAllCollision();
-
-                if (toStart)
-                {
-                    setLifesLeft(getLifesLeft() - 1);
-                    if (getLifesLeft() == 0)
-                    {
-                        Intent intent = new Intent(context, GameOver.class);
-                        intent.putExtra("score",score);
-                        context.startActivity(intent);
-                    }
-                    frog.setStartPosition();
-                }
-
-                if (frog.getY() < 24)
-                {
-                    setLevel(getLevel() + 1);
-                    setScore(getScore() + 50);
-                    frog.setStartPosition();
-                }
+                setLevel(getLevel() + 1);
+                setScore(getScore() + 50);
+                frog.setStartPosition();
             }
         }
     }
@@ -300,6 +340,36 @@ public class FroggerView extends SurfaceView {
     private void setLifesLeft(int lifesLeft)
     {
         this.lifesLeft = lifesLeft;
+    }
+
+    public void addLogs()
+    {
+        Logs.add(createSpriteLog(R.drawable.log, 900, 180, slow, false));
+        hLog = Logs.get(0).getBmp().getHeight();
+        Logs.add(createSpriteLog(R.drawable.log, 900, 180 + hLog, fast, true));
+        Logs.add(createSpriteLog(R.drawable.log, 900, 180 + 2*hLog, slow, false));
+        Logs.add(createSpriteLog(R.drawable.log, 450, 180 + 2*hLog, slow, false));
+        Logs.add(createSpriteLog(R.drawable.log, 450, 180, fast, false));
+        Logs.add(createSpriteLog(R.drawable.log, 450, 180 + hLog, fast, true));
+        Logs.add(createSpriteLog(R.drawable.log, 0, 180 + hLog, fast, true));
+        Logs.add(createSpriteLog(R.drawable.log, 0, 180, fast, false));
+        Logs.add(createSpriteLog(R.drawable.log, 0, 180 + 2*hLog, slow, false));
+    }
+
+
+    private Frog createSpriteFrog(int resource) {
+        Bitmap bmp = BitmapFactory.decodeResource(getResources(), resource);
+        return new Frog(this, bmp);
+    }
+
+    private Log createSpriteLog(int resource, int x, int y, int speed, boolean left) {
+        Bitmap bmp = BitmapFactory.decodeResource(getResources(), resource);
+        return new Log(this, bmp, x, y, speed, left);
+    }
+
+    private Car createSpriteCar(int resource, int x, int y, int speed, boolean left) {
+        Bitmap bmp = BitmapFactory.decodeResource(getResources(), resource);
+        return new Car(this, bmp, x, y, speed, left);
     }
 
     private void drawMap(Canvas canvas)
